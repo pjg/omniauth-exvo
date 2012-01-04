@@ -18,6 +18,20 @@ module OmniAuth
         super
       end
 
+      def callback_url
+        # key = ExvoAuth::Config.callback_key
+        key = '_callback'
+        value = request[key]
+
+        if value
+          # non_interactive (JSON/JSONP)
+          super + "?" + Rack::Utils.build_query(key => value)
+        else
+          # interactive
+          super
+        end
+      end
+
       uid { raw_info['id'] }
 
       info do
