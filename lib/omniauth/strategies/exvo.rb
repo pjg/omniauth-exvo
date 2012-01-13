@@ -1,4 +1,5 @@
 require 'omniauth-oauth2'
+require 'exvo_helpers'
 
 module OmniAuth
   module Strategies
@@ -7,8 +8,8 @@ module OmniAuth
       option :name, 'exvo'
 
       option :client_options, {
-        :site => 'http://auth.exvo.local',
-        :token_url => 'http://auth.exvo.local/oauth/access_token'
+        :site => ::Exvo::Helpers.auth_uri,
+        :token_url => ::Exvo::Helpers.auth_uri + '/oauth/access_token'
       }
 
       def request_phase
@@ -19,7 +20,6 @@ module OmniAuth
       end
 
       def callback_url
-        # key = ExvoAuth::Config.callback_key
         key = '_callback'
         value = request[key]
 
