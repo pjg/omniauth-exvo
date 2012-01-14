@@ -24,6 +24,11 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rack-test'
   gem.add_development_dependency 'webmock'
 
+  gem.add_development_dependency 'guard', ['>= 0.10.0']
+  gem.add_development_dependency 'guard-rspec', ['>= 0.6.0']
+  gem.add_development_dependency "rb-fsevent"
+  gem.add_development_dependency "rb-inotify"
+
   gem.add_development_dependency "simplecov"
   gem.add_development_dependency "simplecov-rcov"
 end
