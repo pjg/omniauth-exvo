@@ -8,7 +8,7 @@ describe OmniAuth::Strategies::Exvo do
     self.app = Rack::Builder.app do
       use Rack::Session::Cookie
       use OmniAuth::Strategies::Exvo
-      run lambda { |env| [200, {'env' => env}, ["Hello!"]] }
+      run lambda { |env| [200, {'env' => env}, ['Hello!']] }
     end
   end
 
@@ -32,10 +32,12 @@ describe OmniAuth::Strategies::Exvo do
     end
   end
 
+  describe '#callback_key' do
+    specify { subject.callback_key.should match(/callback/) }
+  end
+
   describe '#callback_path' do
-    it 'should have the correct callback path' do
-      subject.callback_path.should eq('/auth/exvo/callback')
-    end
+    its(:callback_path) { should eq('/auth/exvo/callback') }
   end
 
   describe '#callback_url' do
@@ -45,14 +47,24 @@ describe OmniAuth::Strategies::Exvo do
     end
 
     it 'should have the correct callback url' do
-      subject.request.should_receive(:[]).with('_callback').and_return(nil)
+      subject.should_receive(:interactive?).and_return(true)
       subject.callback_url.should eq('https://auth.exvo.com/auth/exvo/callback')
     end
 
     it 'should include _callback param if it is passed in request' do
+      subject.should_receive(:interactive?).and_return(false)
       subject.request.should_receive(:[]).with('_callback').and_return('123')
       subject.callback_url.should eq('https://auth.exvo.com/auth/exvo/callback?_callback=123')
     end
+  end
+
+  describe '#interactive? and #non_interactive? return false and true, respectively, if request has callback key' do
+    before do
+      subject.request.should_receive(:[]).with('_callback').and_return('123')
+    end
+
+    it { should_not be_interactive }
+    it { should be_non_interactive }
   end
 
   describe '#uid' do
@@ -93,17 +105,11 @@ describe OmniAuth::Strategies::Exvo do
       subject.stub(:access_token).and_return(@access_token)
     end
 
-    it 'returns a Hash' do
-      subject.credentials.should be_a(Hash)
-    end
+    specify { subject.credentials.should be_a(Hash) }
 
-    it 'returns the token' do
-      subject.credentials['token'].should eq('123')
-    end
+    specify { subject.credentials['token'].should eq('123') }
 
-    it 'returns the expiry status' do
-      subject.credentials['expires'].should eq(false)
-    end
+    specify { subject.credentials['expires'].should eq(false) }
   end
 
   describe '#request_phase' do
@@ -117,6 +123,35 @@ describe OmniAuth::Strategies::Exvo do
 
       follow_redirect!
       last_request.url.should match(/^https:\/\/auth\.exvo\.com\/.+callback$/)
+    end
+  end
+
+  describe '#set_failure_handler' do
+    let(:env) { { 'omniauth.error.type' => 'invalid_credentials', 'SCRIPT_NAME' => 'http://example.com' } }
+    let(:failure) { OmniAuth.config.on_failure.call(env) }
+
+    context "interactive" do
+      before do
+        subject.should_receive(:interactive?).and_return(true)
+        subject.set_failure_handler
+      end
+
+      it 'sets a redirect Rack response array' do
+        failure[0].should eq(302)
+        failure[1]['Location'].should match(/^http:\/\/example.com\/auth\/failure/)
+      end
+    end
+
+    context "non_interactive" do
+      before do
+        subject.should_receive(:interactive?).and_return(false)
+        subject.set_failure_handler
+      end
+
+      it 'sets an unauthorized Rack response array' do
+        failure[0].should eq(401)
+        failure[2][0].should match(/invalid_credentials/)
+      end
     end
   end
 
