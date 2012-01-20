@@ -9,3 +9,7 @@ Both `interactive` and `non_interactive` authentication methods work.
 * add specs
 * add some support for `fail!` for `non_interactive` so that we have some errors instead of silently failing
 * add old "config" so that we have different hosts for different environments
+
+
+
+Copyright © 2011-2012 Exvo.com Development BV, released under the MIT license
