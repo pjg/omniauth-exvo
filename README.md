@@ -1,14 +1,30 @@
-# omniauth-exvo
+# OmniAuth Exvo
 
-Stub at making an omniauth 1.0 compatible authentication gem for Exvo.
+This gem contains the official Exvo strategy for OmniAuth 1.0.
 
-Both `interactive` and `non_interactive` authentication methods work.
+It depends on the [exvo_helpers](https://github.com/Exvo/exvo_helpers) gem for its configuration.
 
-## TODO
+There is also [exvo-auth](https://github.com/Exvo/exvo_auth) gem, which provides additional helper methods, which make both users and app authorizations at Exvo easier.
 
-* add specs
-* add some support for `fail!` for `non_interactive` so that we have some errors instead of silently failing
-* add old "config" so that we have different hosts for different environments
+
+## Installation
+
+Add to your `Gemfile`:
+
+```ruby
+gem 'omniauth-exvo'
+```
+
+Then `bundle install`.
+
+
+## Basic usage
+
+```ruby
+use OmniAuth::Builder do
+  provider :exvo, ENV['AUTH_CLIENT_ID'], ENV['AUTH_CLIENT_SECRET']
+end
+```
 
 
 
