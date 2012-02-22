@@ -13,9 +13,9 @@ module OmniAuth
       }
 
       def request_phase
-        options[:scope] = request["scope"] if request["scope"]
-        options[:state] = request["state"] if request["state"]
-        options[:x_sign_up] = request["x_sign_up"] if request["x_sign_up"]
+        options[:authorize_params][:scope] = request["scope"] if request["scope"]
+        options[:authorize_params][:state] = request["state"] if request["state"]
+        options[:authorize_params][:x_sign_up] = request["x_sign_up"] if request["x_sign_up"]
         super
       end
 

@@ -120,9 +120,15 @@ describe OmniAuth::Strategies::Exvo do
     it 'redirects to auth app with a callback param' do
       get '/auth/exvo'
       last_response.should be_redirect
-
       follow_redirect!
       last_request.url.should match(/^https:\/\/auth\.exvo\.com\/.+callback$/)
+    end
+
+    it 'passes a custom x_sign_up authorize param' do
+      get '/auth/exvo?x_sign_up=true'
+      last_response.should be_redirect
+      follow_redirect!
+      last_request.url.should match(/^https:\/\/auth\.exvo\.com\/.+x_sign_up=true$/)
     end
   end
 
