@@ -18,7 +18,6 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'omniauth', '~> 1.0'
   gem.add_dependency 'omniauth-oauth2', '~> 1.0'
-  gem.add_dependency 'exvo_helpers', '~> 0.2'
 
   gem.add_development_dependency 'rspec', '>= 2.8'
   gem.add_development_dependency 'rack-test'

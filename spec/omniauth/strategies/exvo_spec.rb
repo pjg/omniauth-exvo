@@ -28,7 +28,7 @@ describe OmniAuth::Strategies::Exvo do
     end
 
     it 'should have the correct token url' do
-      subject.client.options[:token_url].should match(/\/oauth\/access_token$/)
+      subject.client.options[:token_url].should eq('/oauth/access_token')
     end
   end
 

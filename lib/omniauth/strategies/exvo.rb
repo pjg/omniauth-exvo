@@ -1,5 +1,4 @@
 require 'omniauth-oauth2'
-require 'exvo_helpers'
 
 module OmniAuth
   module Strategies
@@ -8,8 +7,8 @@ module OmniAuth
       option :name, 'exvo'
 
       option :client_options, {
-        :site => ::Exvo::Helpers.auth_uri,
-        :token_url => ::Exvo::Helpers.auth_uri + '/oauth/access_token'
+        :site => 'https://auth.exvo.com',
+        :token_url => '/oauth/access_token'
       }
 
       def request_phase
