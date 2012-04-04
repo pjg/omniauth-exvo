@@ -43,6 +43,7 @@ describe OmniAuth::Strategies::Exvo do
   describe '#callback_url' do
     before do
       subject.request.should_receive(:url).and_return('https://auth.exvo.com')
+      subject.request.should_receive(:env).and_return(double(:[] => '')) # stubs request.env['HTTP_X_FORWARDED_PROTO']
       subject.should_receive(:script_name).and_return('')
     end
 
