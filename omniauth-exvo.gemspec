@@ -23,6 +23,8 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rack-test'
   gem.add_development_dependency 'webmock'
 
+  gem.add_development_dependency "rake"
+
   gem.add_development_dependency 'guard', ['~> 1.0']
   gem.add_development_dependency 'guard-rspec', ['>= 0.6.0']
   gem.add_development_dependency "rb-fsevent"
