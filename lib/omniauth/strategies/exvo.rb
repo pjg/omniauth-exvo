@@ -12,7 +12,7 @@ module OmniAuth
       }
 
       def request_phase
-        %w(scope state x_sign_up).each do |param|
+        %w(scope x_sign_up).each do |param|
           options[:authorize_params][param.to_sym] = request[param] if request[param]
         end
         super
